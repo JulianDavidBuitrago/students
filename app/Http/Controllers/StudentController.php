@@ -13,9 +13,12 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        
+        $students = Student::latest()->get();
+
+        return view('principal.index',compact('students'));
     }
 
     /**
@@ -36,9 +39,18 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            //('title' => 'required|unique:posts|max:255',
+            'nameStudent' => 'required',
+            'documentNumberStudent' => 'required',
+            'codeStudent' => 'required',
+            'surnameStudent' => 'required',
+            'emailStudent' => 'required|email',
+            'phoneStudent' => 'required|max:10',
+        ]);
         //dd($request);
         $data = DB::select('call insertStudent(?, ?,?, ?,?, ?,?, ?)',array($request->documentTypeStudent,$request->documentNumberStudent,$request->codeStudent,$request->nameStudent,$request->surnameStudent,$request->sexStudent,$request->emailStudent,$request->phoneStudent));
-        return "guardado con éxito!!!";
+        return back()->withInput();
     }
 
     /**
@@ -49,7 +61,7 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-        //
+       //
     }
 
     /**
@@ -83,6 +95,7 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        //
+        $data = DB::select('call deleteStudent(?)',array($student->id,));
+        return back()->withInput();
     }
 }

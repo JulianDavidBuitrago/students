@@ -14,9 +14,16 @@ use App\Http\Controllers\StudentController;
 |
 */
 
-Route::get('/', function () {
+
+/* Route::get('/', function () {
+    return view('principal.index');
+}); */
+
+Route::get('/', [StudentController::class, 'index'])->name('index');
+
+Route::get('/welcome', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 
 Route::resource('students', StudentController::class);
